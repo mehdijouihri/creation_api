@@ -1,25 +1,50 @@
-import logo from './logo.svg';
+import React from "react";
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends React.Component {
+   
+    constructor(props) {
+        super(props);
+   
+        this.state = {
+            items: [],
+            DataisLoaded: false
+        };
+    }
+   
+    componentDidMount() {
+        fetch("https://dummyjson.com/products/")
+            .then((res) => res.json())
+            .then((json) => {
+                this.setState({
+                    items: json.products,
+                    DataisLoaded: true
+                });
+            })
+    }
+    render() {
+        const { DataisLoaded, items } = this.state;
+        if (!DataisLoaded) return <div>
+            <h1> Pleses wait some time.... </h1> </div> ;
+   
+        return (
+        <div className = "App">
+            <h1> New Arrival phones </h1>  {
+                items.map((item) => ( 
+                <ol key = { item.id } >
+                  <li class="list">
+                       <li class="titre">title: { item.title }</li>
+                       <li classe="descrip">description: { item.description }</li>
+                       <li class="prix">price: { item.price } </li>
+                   </li>
+                       <img src={item.thumbnail} alt="images"></img>
+                  </ol>
 
+                ))
+            }
+        </div>
+    );
+}
+}
+   
 export default App;
